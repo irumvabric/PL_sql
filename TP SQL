@@ -1,0 +1,145 @@
+    -- Table ACCOUNT
+    CREATE TABLE ACCOUNTS (
+        accountID NUMBER PRIMARY KEY,
+        nom_accout VARCHAR2(50) NOT NULL,
+        DateOfBirth DATE,
+        password VARCHAR2(30),
+        Adresse_account VARCHAR2(100),
+        Telephone_account VARCHAR2(20),
+        Email_account VARCHAR2(50),
+        DateOfCreation DATE
+    );
+
+    -- Table Post
+    CREATE TABLE Post (
+        postID NUMBER PRIMARY KEY,
+        text_post VARCHAR2(50) NOT NULL 
+    );
+
+    CREATE TABLE Following (
+        FollowingID NUMBER PRIMARY KEY,
+        idAccount_following VARCHAR2(50) NOT NULL,
+        DateOfFFollowing DATE,
+        followersCommon NUMBER
+    );
+
+    CREATE TABLE Followers (
+        FollowerID NUMBER PRIMARY KEY,
+        idAccount_follower VARCHAR2(50) NOT NULL,
+        DateOfFFollowing DATE,
+        followersCommon NUMBER
+    );
+
+    -- Table Article
+    -- CREATE TABLE Article (
+    --     ArticleID NUMBER PRIMARY KEY,
+    --     Nom_Art VARCHAR2(50) NOT NULL,
+    --     Description_Art VARCHAR2(200),
+    --     Prix_Art NUMBER(10,2) NOT NULL,
+    --     FournisseurID NUMBER,    
+    --     ClientID NUMBER,
+    --     VendeurID NUMBER,
+    --     CONSTRAINT fk_article_fournisseur FOREIGN KEY (FournisseurID)
+    --         REFERENCES Fournisseur(FournisseurID) ON DELETE CASCADE,
+    --     CONSTRAINT fk_article_Client FOREIGN KEY (ClientID)
+    --         REFERENCES Client(ClientID) ON DELETE CASCADE,    
+    --     CONSTRAINT fk_article_Vendeur FOREIGN KEY (VendeurID)
+    --         REFERENCES Vendeur(VendeurID) ON DELETE CASCADE
+    -- );
+
+
+--------------------------------------------OK-----------------------------------------------------
+SET SERVEROUTPUT ON
+
+CREATE OR REPLACE PROCEDURE CreatingAccount(
+        accountID NUMBER PRIMARY KEY,
+        nom_accout VARCHAR2(50) NOT NULL,
+        DateOfBirth DATE,
+        password VARCHAR2(30),
+        Adresse_account VARCHAR2(100),
+        Telephone_account VARCHAR2(20),
+        Email_account VARCHAR2(50),
+        DateOfCreation DATE
+   )IS
+
+  verify_number := 0;
+
+BEGIN   
+
+    
+    SELECT COUNT(*) 
+    INTO verify_number 
+    FROM ACCOUNTS
+    WHERE nom_accout like %||name||%
+   
+    -- SI l'utlisateur est present
+    IF verify_number > 0 THEN 
+        INSERT INTO ACCOUNTS(
+  accountID ,nom_accout ,DateOfBirth,password,Adresse_account,Telephone_account,Email_account,DateOfCreation) 
+  VALUES(accountID ,nom_accout ,DateOfBirth,password,Adresse_account,Telephone_account,Email_account,DateOfCreation);
+    
+  ELSE
+      SYS.dbms_output.put_line("The username is already taken"); 
+  END IF;
+
+    -- Table ACCOUNT
+    CREATE TABLE ACCOUNT (
+        accountID NUMBER PRIMARY KEY,
+        nom_accout VARCHAR2(50) NOT NULL,
+        Adresse_account VARCHAR2(100),
+        Telephone_account VARCHAR2(20),
+        Email_account VARCHAR2(50),
+        DateOfCreation Datetime
+    );
+
+    -- Table Post
+    CREATE TABLE Post (
+        postID NUMBER PRIMARY KEY,
+        text_post VARCHAR2(50) NOT NULL,    
+    );
+
+    CREATE TABLE Following (
+        FollowingID NUMBER PRIMARY KEY,
+        idAccount_following VARCHAR2(50) NOT NULL,
+        DateOfFFollowing Datetime,
+        followersCommon NUMBER
+    );
+
+    CREATE TABLE Followers (
+        FollowerID NUMBER PRIMARY KEY,
+        idAccount_follower VARCHAR2(50) NOT NULL,
+        DateOfFFollowing Datetime,
+        followersCommon NUMBER
+    );
+
+    -- Table Article
+    -- CREATE TABLE Article (
+    --     ArticleID NUMBER PRIMARY KEY,
+    --     Nom_Art VARCHAR2(50) NOT NULL,
+    --     Description_Art VARCHAR2(200),
+    --     Prix_Art NUMBER(10,2) NOT NULL,
+    --     FournisseurID NUMBER,    
+    --     ClientID NUMBER,
+    --     VendeurID NUMBER,
+    --     CONSTRAINT fk_article_fournisseur FOREIGN KEY (FournisseurID)
+    --         REFERENCES Fournisseur(FournisseurID) ON DELETE CASCADE,
+    --     CONSTRAINT fk_article_Client FOREIGN KEY (ClientID)
+    --         REFERENCES Client(ClientID) ON DELETE CASCADE,    
+    --     CONSTRAINT fk_article_Vendeur FOREIGN KEY (VendeurID)
+    --         REFERENCES Vendeur(VendeurID) ON DELETE CASCADE
+    -- );
+    
+    DECLARE
+        var1 VARCHAR2(30) := 'BURUNDI';
+
+    BEGIN
+        SYS.DBMS_OUTPUT.PUT_LINE(var1);
+    
+
+    END;
+        SYS.DBMS_OUTPUT.PUT_LINE(var1);
+
+END;
+/
+
+
