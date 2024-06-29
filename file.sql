@@ -19,6 +19,10 @@ BEGIN
 END;
 /
 
+    
+-------------------------------------------------------------------------------------------------------------
+    
+
 SELECT * FROM FOURNISSEUR;
 
 SET SERVEROUTPUT ON
@@ -44,6 +48,7 @@ END;
 
 
 
+-------------------------------------------------------------------------------------------------------------
 
 
 
@@ -68,6 +73,7 @@ END;
 /
 
 
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 
@@ -81,6 +87,8 @@ BEGIN
 END;
 /
 
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 
@@ -104,6 +112,7 @@ END;
 /
 
 
+-------------------------------------------------------------------------------------------------------------
 
 
 SET SERVEROUTPUT ON
@@ -128,6 +137,7 @@ END;
 /
 
 
+-------------------------------------------------------------------------------------------------------------
 
 
 SET SERVEROUTPUT ON
@@ -140,6 +150,8 @@ DBMS_OUTPUT.PUT_LINE('MON NOM EST ' || Nom || nomdate || numdate);
 END;
 /
 
+-------------------------------------------------------------------------------------------------------------
+
 SET SERVEROUTPUT ON
 DECLARE
 nomuni VARCHAR2(10) := 'BU';
@@ -151,6 +163,9 @@ DBMS_OUTPUT.PUT_LINE('LA CONDITION NON VERIFIE');
 END IF;
 END;
 /
+
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE 
@@ -169,6 +184,8 @@ END IF;
 END;
 /
 
+-------------------------------------------------------------------------------------------------------------
+
 SET SERVEROUTPUT ON
 DECLARE
 resultat NUMBER:=60;
@@ -186,6 +203,8 @@ END IF;
 END IF;
 END;
 /
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -201,6 +220,9 @@ END LOOP;
 END;
 /
 
+    
+-------------------------------------------------------------------------------------------------------------
+    
 SET SERVEROUTPUT ON
 DECLARE
 number1 number:=0;
@@ -212,6 +234,9 @@ END LOOP;
 END;
 /
 
+    
+-------------------------------------------------------------------------------------------------------------
+
 SET SERVEROUTPUT ON
 DECLARE
 number1 number:=0;
@@ -221,6 +246,9 @@ FOR number1 in 1 .. 10 LOOP
 END LOOP;
 END;
 /
+
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -232,6 +260,9 @@ EXIT WHEN number1>4;
 END LOOP;
 END;
 /
+
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -245,6 +276,9 @@ FOR number1 in 1 .. 10 LOOP
 END LOOP;
 END;
 /
+
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -260,6 +294,9 @@ FOR number1 in 1 .. 10 LOOP
     DBMS_OUTPUT.PUT_LINE('SORTIE A LA BOUCLE= '||number1);
     END;
 /
+
+    
+-------------------------------------------------------------------------------------------------------------
 
 SET SERVEROUTPUT ON
 DECLARE
@@ -278,3 +315,75 @@ BEGIN
     END CASE;      
     END;
 /
+
+
+--Creating a anonymus function to retrieve data from the database using a id and a a 3 caracter string
+
+SET SERVEROUTPUT ON
+
+DECLARE
+
+    res FOURNISSEUR%ROWTYPE;
+    caractere VARCHAR2(3) := 'gir';
+    
+    Cursor C(id_fournisseur in FOURNISSEUR.FournisseurID%Type,caractere in Varchar2) Is 
+    SELECT * FROM FOURNISSEUR WHERE 
+    FOURNISSEURID= id_fournisseur AND Nom_Fourn like '%'|| caractere ||'%'   ;
+
+BEGIN    
+--    SELECT * into res FROM FOURNISSEUR WHERE FOURNISSEURID= id_fournisseur;
+    
+    OPEN C(1,'Arakaza');
+        FETCH C INTO res;
+        SYS.DBMS_OUTPUT.PUT_LINE(res.Nom_Fourn);
+    CLOSE C;
+
+END;
+/
+
+
+    
+-------------------------------------------------------------------------------------------------------------
+
+CREATE OR REPLACE PROCEDURE ChangementDeNom
+(
+id_F in FOURNISSEUR.FournisseurID%Type,
+nom_F2 in VARCHAR2
+)IS 
+BEGIN
+--Changement de Nom du Fournisseur
+    UPDATE Fournisseur SET Nom_Fourn = nom_F2 WHERE FournisseurID = id_F;
+
+END;
+/
+
+
+EXECUTE ChangementDeNom(1,'Ciza');
+
+SELECT * FROM Fournisseur;
+
+
+SET SERVEROUTPUT ON
+
+DECLARE
+
+    res FOURNISSEUR%ROWTYPE;
+BEGIN
+    SELECT * INTO res FROM FOURNISSEUR WHERE FOURNISSEURID= 1;
+    
+    SYS.DBMS_OUTPUT.PUT_LINE(res.Nom_Fourn);
+    
+    ChangementDeNom(1,'Bigirimana');
+    
+    SELECT * INTO res FROM FOURNISSEUR WHERE FOURNISSEURID= 1;
+    
+    SYS.DBMS_OUTPUT.PUT_LINE(res.Nom_Fourn);
+
+
+END;
+/
+
+
+
+
+-------------------------------------------------------------------------------------------------------------
