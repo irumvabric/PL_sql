@@ -1,3 +1,5 @@
+--A story of instagram or and its database
+
     -- Table ACCOUNT
     CREATE TABLE ACCOUNTS (
         accountID NUMBER PRIMARY KEY,
