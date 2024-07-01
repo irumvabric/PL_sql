@@ -22,3 +22,15 @@ Execute as a whole block.
 Mainly used to create an application.
 
 It is an extension of SQL, so it can contain SQL inside it.
+
+
+DECLARE
+    declaration statements;
+
+BEGIN
+    executable statements
+
+EXCEPTIONS
+    exception handling statements
+
+END;
