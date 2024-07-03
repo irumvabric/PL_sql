@@ -114,3 +114,48 @@ BEGIN
 END;
 
 
+---------------------------------------------------------------------------
+
+
+CREATE OR REPLACE Function insertValues
+Return number
+IS 
+number_line number;
+BEGIN
+--Insertion des donnees
+
+    INSERT INTO CLIENT (CLIENTID, NOM_CL, ADRESSE_CL, TELEPHONE_CL, EMAIL_CL)
+    VALUES (7,'Keza','Kigobe','257767654','keza@gmail.com');
+    
+    INSERT INTO CLIENT (CLIENTID, NOM_CL, ADRESSE_CL, TELEPHONE_CL, EMAIL_CL)
+    VALUES (8,'Jimmy','Kiriri','257767654','jimmy@gmail.com');
+    
+    INSERT INTO CLIENT (CLIENTID, NOM_CL, ADRESSE_CL, TELEPHONE_CL, EMAIL_CL)
+    VALUES (9,'Terry','Jabe','257767654','terry@gmail.com');
+    
+    INSERT INTO CLIENT (CLIENTID, NOM_CL, ADRESSE_CL, TELEPHONE_CL, EMAIL_CL)
+    VALUES (10,'Franck','Bwiza','257767654','franck@gmail.com');
+    
+    INSERT INTO CLIENT (CLIENTID, NOM_CL, ADRESSE_CL, TELEPHONE_CL, EMAIL_CL)
+    VALUES (11,'Jeanne','Kanyosha','257767654','jeanne@gmail.com');
+    
+    SELECT count(*) INTO number_line FROM CLIENT;
+    
+    Return number_line;
+END;
+/
+
+--------------------------------------------------------------------------
+
+SET SERVEROUTPUT ON;
+
+DECLARE
+
+  numbers number;
+BEGIN
+  numbers := insertValues();
+  SYS.DBMS_OUTPUT.PUT_LINE('NOM : '||' '||numbers);
+END;
+
+--------------------------------------------------------------------------
+
