@@ -115,4 +115,5 @@ end;
 
 
 
+:new.CustomerID := 'C-'||nouveaucle||'-'||TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY'));
 
