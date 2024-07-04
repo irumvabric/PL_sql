@@ -50,3 +50,25 @@ end;
 
 end P_client;
 /
+
+
+
+
+
+
+BEGIN
+    -- Calling the procedure
+    P_client.supprimer_client(11);
+    P_client.update_client_tel(10,'76765764');
+    P_client.update_client_addr(9,'Musaga');
+    P_client.update_client_email(8,'trette@gmail.com');
+    
+--    -- Calling the function and storing the result in a variable
+--    DECLARE
+--        v_result VARCHAR2(100);
+--    BEGIN
+--        v_result := my_package.my_function('Test Function');
+--        DBMS_OUTPUT.PUT_LINE(v_result);
+--    END;
+END;
+/
