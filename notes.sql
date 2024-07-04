@@ -1,0 +1,1010 @@
+I. Introduction au  bloc PL/SQL
+PL/SQL est un langage structuré en blocs, constitués d'un ensemble d'instructions. Un bloc PL/SQL peut être "externe", on dit alors qu'il est anonyme, ou alors stocké dans la base de données sous forme de procédure, fonction ou déclencheur. 
+Un bloc PL/SQL est intégralement envoyé au moteur PL/SQL, qui traite chaque instruction PL/SQL et sous-traite les instructions purement SQL au moteur SQL, afin de réduire le trafic réseau.
+Syntaxe d’un bloc PL/SQ L
+Chaque bloc PL/SQL peut être constitué de 3 sections :
+Une section facultative de déclaration et initialisation de types, variables et constantes ;
+Une section obligatoire contenant les instructions d'exécution ;
+Une section facultative de gestion des erreurs ;
+[DECLARE 
+… déclaration et initialisation] 
+BEGIN 
+… instructions exécutables 
+[EXCEPTION … interception des erreurs] 
+END;
+Un bloc PL/SQL minimum peut être représenté de la façon suivante:
+BEGIN 
+Null ; 
+END;
+Le mot clé BEGIN détermine le début de la section des instructions exécutables. Le mot clé END; indique la fin de la section des instructions exécutables. Une seule instruction figure dans ce bloc : Null; qui ne génère aucune action. Ce bloc PL/SQL ne fait donc absolument rien.
+La section déclarative (facultative) d'un bloc débute par le mot clé DECLARE. Elle contient toutes les déclarations des variables qui seront utilisées localement par la section exécutable, ainsi que leur éventuelle initialisation.
+SET SERVEROUTPUT ON
+DECLARE
+nom VARCHAR2(20):='NZOYIHAYA Desire';
+BEGIN
+SYS.DBMS_OUTPUT.PUT_LINE('Hello '|| nom);
+END;
+/
+Une variable nom est déclaré de type VARCHAR2(20) et initialisée avec la valeur 'NZOYIHAYA Desire'.
+Dans la section exécutable, cette variable est transmise à la fonction DBMS_OUTPUT() pour être affichée à l'écran.
+Cette section ne peut pas contenir d'instructions exécutables. Toutefois, il est possible de définir dans cette section des procédures ou des fonctions contenant une section exécutable. Toute variable doit avoir été déclarée avant de pouvoir être utilisée dans la section exécutable.
+Utiliser un slash (/) pour exécuter un boc PL/SQL anonyme dans PL/SQL.
+Placer un point-virgule (;) à la fin d’une instruction SQL ou SQL*PLUS.
+Les chaînes de caractères et les dates doivent être entourées de simples quottes ( ' ' ).
+Les commentaires peuvent être :
+sur plusieurs lignes avec : /* début et fin de commentaire*/
+sur une ligne précédée de : -- début et fin de commentaire
+La section de gestion des erreurs (facultative) débute par le mot clé EXCEPTION. Elle contient le code exécutable mis en place pour la gestion des erreurs. Lorsqu'une erreur intervient dans l'exécution, le programme est stoppé et le code erreur est transmis à cette section.
+SET SERVEROUTPUT ON
+DECLARE
+nom VARCHAR2(20):='NZOYIHAYA Desire';
+BEGIN
+SYS.DBMS_OUTPUT.PUT_LINE('Hello '|| nom);
+EXCEPTION
+WHEN OTHERS THEN
+null;
+END;
+/
+Les erreurs doivent être interceptées avec le mot clé WHEN suivi du code erreur ciblé. Ici, le code OTHERS qui définit toutes les erreurs non interceptées individuellement par les clauses WHEN précédentes. Cette section peut elle-même contenir d'autres blocs PL/SQL. Les blocs PL/SQL peuvent être imbriqués les uns dans les autres et les variables peuvent être locales ou globales
+I.1. La section déclarative
+Dans cette section tous les types, variables et constantes nécessaires à l'exécution du bloc peuvent être déclarés. Ces variables peuvent être de n'importe quel type SQL ou PL/SQL. Leur initialisation s'effectue avec l'opérateur « := ».
+v_gender CHAR( 1 ); 
+v_count BINARY_INTEGER := 0; 
+v_total_sal NUMBER( 9, 2 ) := 0; 
+v_order_date DATE := SYSDATE; 
+v_valid BOOLEAN NOT NULL := TRUE;
+LCNom VARCHAR2(10) := 'PL/SQL' ;
+Une constante est une variable dont l'initialisation est obligatoire et dont la valeur ne pourra pas être modifiée en cours d'exécution. Elle est déclarée avec le mot clé : CONSTANT qui doit précéder le type
+c_tax_rate CONSTANT NUMBER ( 3, 2 ) := 8.25; 
+Pi CONSTANT REAL := 3. 1415926535;
+university constant varchar2(50) := ' biu ' ;
+PL/SQL n'est pas sensible à la casse. Pour lui les expressions suivantes sont équivalentes :
+NOM_VARIABLE NUMBER; 
+Nom_Variable Number; 
+nom_variable number;
+I.2. La section exécution
+Délimitée par les mots clé BEGIN et END; elle contient les instructions d'exécution du bloc PL/SQL, les instructions de contrôle et d'itération, l'appel des procédures et fonctions, l'utilisation des fonctions natives, les ordres SQL, etc.
+Chaque fois que vous lancez Oracle SQL (PL/SQL), vous devez écrire la commande « SET Serveroutput ON ».
+Le programme PL/SQL étant exécuté dans le moteur Oracle, il faut toujours récupérer le résultat de la sortie serveur et l'afficher à l'écran, sinon le résultat ne peut pas être affiché.
+Chaque instruction doit être suivi du terminateur d'instruction ;
+Voici la liste des instructions que cette section peut contenir
+L'assignation d'une valeur à une variable peut être faite de 2 façons différentes :
+En utilisant l'opérateur :=
+Ma_variable:=10 ; 
+Ma_chaîne:='Chaîne de caractères';
+
+II. Instructions de contrôle
+II.1. IF THEN
+Forme générale
+
+IF (condition) THEN
+    Instructions;
+END IF;
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   nom VARCHAR2(5) := 'BIU';
+BEGIN
+   IF ( nom = 'BIU' ) THEN
+      DBMS_OUTPUT.PUT_LINE('condition est vrai');   
+   END IF;
+END;
+/
+II.2. IF THEN ELSE
+Forme générale
+IF ( condition ) THEN
+    instructions;
+ELSE
+    instructions;  
+END IF;
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   nom VARCHAR2(5) := 'BIU';
+BEGIN
+   IF ( nom = 'BIU2' ) THEN
+      DBMS_OUTPUT.PUT_LINE('condition est vrai');
+      else
+      DBMS_OUTPUT.PUT_LINE('condition est fausse');
+   END IF;
+END;
+/
+II.3. IF THEN ELSIF
+Forme générale
+IF ( condition-1 ) THEN
+    instructions-1;
+ELSIF ( condition-2 ) THEN
+    instructions-2;
+ELSIF ( condition-3 ) THEN
+    instructions-3;    
+ELSE
+    instructions;
+END IF;
+Exemple :
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 16;
+   b NUMBER := 16;
+BEGIN
+   IF ( a>b ) THEN
+      DBMS_OUTPUT.PUT_LINE('a est supérieur à b');
+      ELSIf (a<b)THEN
+      DBMS_OUTPUT.PUT_LINE(' a est inférieur à b');
+      ELSE
+      DBMS_OUTPUT.PUT_LINE(' a égale à b');
+   END IF;
+END;
+/
+II.4. IF THEN ELSE imbriqué
+Forme générale
+IF ( condition-1 ) THEN
+    instructions-1;
+ELSE
+    IF ( condition-2 ) THEN
+        instructions-2;
+    ELSE
+        IF ( condition-3 ) THEN
+            instructions-3;
+        END IF;
+    END IF;
+END IF;
+Exemple
+SET SERVEROUTPUT ON
+DECLARE
+    note NUMBER := 88.4;
+BEGIN
+   IF ( note < 50 ) THEN
+      DBMS_OUTPUT.PUT_LINE('Ajourner');  
+   ELSE 
+       IF ( note >=50 and note <=60 ) THEN
+          DBMS_OUTPUT.PUT_LINE('Mention passable');   
+       ELSIF ( note >=60 and note <=70 ) THEN
+          DBMS_OUTPUT.PUT_LINE('Mention satisfaction');  
+       ELSIF ( note >=70 and note <=80 ) THEN
+          DBMS_OUTPUT.PUT_LINE('Distinction');  
+       ELSIF ( note >=80 and note <=90 ) THEN
+          DBMS_OUTPUT.PUT_LINE('Gde distinction');        
+       ELSE
+          DBMS_OUTPUT.PUT_LINE('Excellent');
+       END IF;
+    END IF;
+END;
+/
+III Boucles 
+En PL/SQL une boucle est utilisée lorsqu'un bloc d'instructions doit être répété un certain nombre de fois. Les instructions de boucle PL/SQL se présentent sous 3 formes différentes.
+III.1. Loop 
+Forme générale 
+Loop
+	Instructions;
+End loop;
+Exemple: afficher les valeurs de a de à 10
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE (' a = ' || a);
+        a := a +1;
+        IF a > 10 THEN
+            EXIT;
+        END IF;
+    END LOOP;  
+END;
+/
+
+III.2. While Loop
+Forme générale 
+WHILE condition LOOP 
+   Instructions;
+END LOOP;
+Exemple : 
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    while a > 10 LOOP
+        DBMS_OUTPUT.PUT_LINE (' a = ' || a);
+        a := a +1;
+    END LOOP;  
+END;
+/
+III.3. For Loop 
+Forme générale 
+FOR variable IN Valeur1 .. valeur2 LOOP 
+   Instructions;
+END LOOP;
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    for a in 0..10 LOOP
+        DBMS_OUTPUT.PUT_LINE (' a = ' || a);
+    END LOOP; 
+END;
+/
+IV. Séquence de contrôle
+Les instructions de séquence de contrôle sont utilisées pour sortir de la boucle, ces instructions assurent le contrôle d’itération dans les boucles.
+IV.1. Instruction EXIT
+L'instruction EXIT quitte inconditionnellement l'itération de la boucle.
+Forme générale
+LOOP 
+   Instruction(s);
+   EXIT; 
+END LOOP
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE (' a = ' || a);
+        a := a +1;
+        IF a > 10 THEN
+            EXIT;
+        END IF;
+    END LOOP;  
+END;
+/
+
+IV.2. Instruction EXIT WHEN
+L'instruction EXIT WHEN permet de quitter inconditionnellement l'itération de la boucle en cours lorsque la condition de la clause WHEN est vraie.
+Forme générale
+LOOP 
+   instruction(s);
+   EXIT WHEN condition;
+END LOOP
+Exemple :
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    LOOP
+        DBMS_OUTPUT.PUT_LINE (' a = ' || a);
+        a := a +1;
+            EXIT WHEN a > 10;
+    END LOOP;  
+END;
+/
+IV.3. Instruction CONTINUE
+
+Forme générale
+IF condition THEN
+    CONTINUE;
+END IF;
+
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    FOR a IN 1 .. 5 LOOP
+        IF a = 4 THEN
+           CONTINUE;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('a = ' || a);
+    END LOOP;
+END;
+/
+IV.4. Instruction CONTINUE WHEN
+
+Forme générale
+CONTINUE WHEN condition;
+    Instruction (s);
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    FOR a IN 1 .. 5 LOOP
+           CONTINUE WHEN a=4;
+        DBMS_OUTPUT.PUT_LINE('a = ' || a);
+    END LOOP;
+END;
+/
+IV.5. Instruction COTO
+
+Forme générale
+GOTO code_name
+    -----------
+    -----------
+<<code_name>>
+-----------
+-----------
+
+Exemple:
+SET SERVEROUTPUT ON
+DECLARE
+   a NUMBER := 0;
+BEGIN
+    FOR a IN 1 .. 5 LOOP
+        IF a = 4 THEN
+           GOTO AffichageFin;
+        END IF;
+        DBMS_OUTPUT.PUT_LINE('a = ' || a);        
+    END LOOP;
+    <<AffichageFin>>
+        DBMS_OUTPUT.PUT_LINE('Sortie de la boucle ');
+END;
+/
+IV.6. Instruction CASE simple
+Forme générale
+CASE choix
+    WHEN value-1 THEN
+        instruction-1;
+    WHEN value-2 THEN
+        instruction-2;
+    ELSE
+        instruction-3;
+END CASE ;
+Exemple :
+set SERVEROUTPUT ON
+DECLARE
+    a number := 9;
+    b number := 3;
+    i number := 3;
+BEGIN
+    CASE i  
+        WHEN 1 THEN
+            DBMS_OUTPUT.PUT_LINE('a+b = '||a+b);    
+        WHEN 2 THEN
+            DBMS_OUTPUT.PUT_LINE('a-b = '||a-b);    
+        WHEN 3 THEN
+            DBMS_OUTPUT.PUT_LINE('a*b = '||a*b);
+        WHEN 4 THEN
+            DBMS_OUTPUT.PUT_LINE('a/b = '||a/b);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Aucun cas defini'); 
+    END CASE;   
+END;
+/
+
+IV.7. Case avec condition
+Forme générale
+CASE
+    WHEN condition-1 THEN 
+        instruction-1;
+    WHEN condition-2 THEN 
+        instruction-2;
+    ELSE
+        instruction-3;	
+END CASE;
+
+Exemple :
+set SERVEROUTPUT ON
+DECLARE
+    a number := 2;
+    b number := 5;
+    somme number;
+    difference number;
+    produit number;
+BEGIN
+    CASE    
+        WHEN a = 1 THEN
+            somme:=a+b;
+            DBMS_OUTPUT.PUT_LINE('a+b = '||somme);    
+        WHEN a = 2 THEN
+            difference:=a-b;
+            DBMS_OUTPUT.PUT_LINE('a-b = '||difference);    
+        WHEN a = 3 THEN
+            produit:=a*b;
+            DBMS_OUTPUT.PUT_LINE('a*b = '||produit);        
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('Aucun cas'); 
+    END CASE;   
+END;
+/
+V. Les curseurs
+Un curseur est un pointeur qui correspond à une requête. Il existe deux types de curseur : Curseur implicite et Curseur explicite.
+V.1. Curseur implicite
+Les curseurs implicites sont créés par le système et ne sont pas manipulable par l’utilisateur. Le curseur implicite est créé à chaque fois qu’on exécute une requête de manipulation des données. 
+Sur Oracle, les données demandées par l’utilisateur sont stockées dans la mémoire PGA (Program Global Area) où il y a les curseurs qui sont des pointeurs qui pointent sur les données (première ligne, 2è ligne, …). Il y a une mémoire spéciale qui permet de stocker toutes les informations concernant cette requête à savoir les types de données, les noms des champs, …
+V.2. Curseur explicite  
+Déclaration du curseur
+La déclaration du curseur permet de stocker l'ordre Select dans le curseur. Le curseur se définit dans la partie Declare d'un bloc PL/Sql. 
+Forme générale de : Cursor nomcurseur IS Requete_SELECT ;
+Syntaxe : declare cursor <nom_curseur> IS SELECT col1, col2, col3, … from tab1, tab2, tab3, … where <condition>;
+Exemple: 
+Declare 
+cursor c_employe IS SELECT nom_emp, prenom_emp, salaire FROM employe WHERE salaire BETWEEN 100000 AND 250000;
+Il y a les traitement complexe qu’on ne peut pas faire en utilisant les requêtes. Les curseurs explicites sont manipulés par l’utilisateur. La session d’un curseur comprend 4 étapes :
+La définition ;
+L’ouverture ;
+Exploitation ;
+Fermeture.
+Cursor nom_curseur : declaration du curseur
+Open nom_curseur : Ouverture d'un curseur SQL
+Fetch nom_curseur into nom_variable: le curseur est lu par l’instruction fetch. mettre chaque ligne de mon curseur dans nom_variable
+Close nom_curseur : fermeture du curseur
+Les attributs du curseur
+%ISOPEN : Cet attribut prend la valeur TRUE lorsque le curseur indiqué est ouvert, sinon il prend la valeur FALSE
+%FOUND : Cet attribut prend la valeur TRUE lorsque une ligne est ramenée, sinon il prend la valeur FALSE
+%NOTFOUND : Cet attribut prend la valeur FALSE lorsque une ligne est ramenée, sinon il prend la valeur TRUE
+%ROWCOUNT : Cet attribut retourne le nombre de lignes impactées par la dernière instruction SQL
+Ces attributs sont type booléen sauf %ROWCOUNT de type numérique
+
+
+Exemple :
+set SERVEROUTPUT ON
+Declare 
+Nom_client CLIENT.NOMCLIENT%Type ;
+ Cursor C Is Select NOMCLIENT From client Where NUMCLIENT=1; 
+Begin 
+ Select NOMCLIENT Into Nom_client From client Where NUMCLIENT= 1; 
+ Open C ;
+ Fetch C Into Nom_client;
+ DBMS_OUTPUT.PUT_LINE(Nom_client);
+ Close C ;
+End ; 
+/
+V.3 Curseur paramétré
+Le curseur paramétré PL/SQL permet de passer les paramètres dans un curseur et de les utiliser dans une requête.
+Le curseur paramétré PL/SQL définit uniquement le type de données du paramètre et n'a pas besoin de définir sa longueur.
+Les valeurs par défaut sont assignées aux paramètres du curseur. La portée des paramètres est locale.
+Les curseurs paramétrés sont également des curseurs statiques qui peuvent transmettre la valeur du paramètre lorsque le curseur est ouvert.
+Exemple :
+set SERVEROUTPUT ON
+DECLARE
+nom client.NomClient%type;
+CURSOR c_client (Num_client in client.numclient%type) is select nomclient from client where numclient=num_client;
+BEGIN
+open c_client(2);
+fetch c_client into nom;
+DBMS_OUTPUT.PUT_LINE(nom);
+close c_client;
+end;
+/
+VI. Portée des variables
+La portée ou visibilité d'une variable est limitée au bloc PL/SQL dans lequel elle est déclarée. Elle est donc locale au bloc PL/SQL. la visibilité d'une variable se rapporte toujours à la plus proche déclaration
+set serveroutput on
+Declare
+ chaine1 varchar2(10) := 'University'; 
+ Begin
+ Declare
+ chaine1 varchar2(10) := 'Bujumbura'; 
+ Begin
+ dbms_output.put_line( 'chaine1 = ' || chaine1 ) ; 
+ End ;
+ dbms_output.put_line( 'chaine1 = ' || chaine1 ) ; 
+ End ;
+ /
+
+
+VII. Gestion des erreurs 
+Les exceptions PL/SQL sont prédéfinies et levées automatiquement dans le moteur Oracle lorsqu'une erreur survient au cours d'un programme. Chaque erreur a un numéro et un message uniques. Lorsqu'un avertissement ou une erreur survient dans un programme, on parle d'exception qui contient des informations sur l'erreur.
+En PL/SQL, les exceptions sont intégrées ou définies par l'utilisateur. Exemples d'exceptions de type intégré (définies en interne) : division par zéro, manque de mémoire. Certaines exceptions intégrées courantes ont des noms prédéfinis tels que ZERO_DIVIDE et STORAGE_ERROR.
+Normalement, lorsqu'une exception est déclenchée, l'exécution s'arrête et le contrôle est transféré à la partie de votre bloc PL/SQL qui gère l'exception. Les exceptions internes sont levées implicitement (automatiquement) par le système d'exécution. Les exceptions définies par l'utilisateur doivent être levées explicitement par des instructions RAISE, qui sont également des exceptions prédéfinies.
+Voice quelques noms d’exception, leurs codes d’erreur et la description dans le tableau suivant.
+Exception	Code d’erreur	Description
+ACCESS_INTO_NULL	ORA-06530	Exception soulevée lors de l'affectation d'un objet non initialisé (NULL).
+CASE_NOT_FOUND	ORA-06592	Exception soulevée lorsqu'aucun cas de choix n'est trouvé dans l'instruction CASE et qu'aucune clause ELSE n'est présente dans l'instruction CASE.
+CURSOR_ALREADY_OPEN	ORA-06511	Exception soulevée lorsque vous ouvrez un curseur déjà ouvert.
+DUP_VAL_ON_INDEX	ORA-00001	Exception soulevée lorsque vous stockez une valeur en double dans une colonne de contrainte unique.
+INVALID_CURSOR	ORA-01001	Exception soulevée lorsque vous effectuez une opération sur le curseur et que celui-ci n'est pas réellement ouvert.
+INVALID_NUMBER	ORA-01722	Exception soulevée lorsque vous essayez de convertir explicitement une chaîne de caractères en un nombre.
+LOGIN_DENIED	ORA-01017	Exception soulevée lors de la connexion à Oracle avec un nom d'utilisateur ou un mot de passe erroné.
+NO_DATA_FOUND	ORA-01403	Exception soulevée lorsque l'instruction SELECT ... INTO ne récupère aucune ligne d'une table de base de données.
+NOT_LOGGED_ON	ORA-01012	Exception soulevée lorsque votre programme essaie d'obtenir des données de la base de données et que l'utilisateur n'est pas connecté à Oracle.
+PROGRAM_ERROR	ORA-06501	Exception soulevée lorsque votre programme est sujet à des erreurs (erreur interne).
+STORAGE_ERROR	ORA-06500	Exception soulevée lorsque le programme PL/SQL manque de mémoire ou que la mémoire est vidée/corrompue.
+SYS_INVALID_ROWID	ORA-01410	Exception soulevée lorsque vous essayez de convertir explicitement une chaîne de caractères en un identifiant universel (uid).
+TIMEOUT_ON_RESOURCE	ORA-00051	Exception levée lorsque la base de données est verrouillée ou qu'ORACLE attend une ressource.
+TOO_MANY_ROWS	ORA-01422	Exception soulevée lorsque l'instruction SELECT ... INTO renvoie plus d'une ligne.
+VALUE_ERROR	ORA-06502	Exception levée en cas d'erreur arithmétique, de conversion ou de contrainte de taille définie.
+ZERO_DIVIDE	ORA-01476	Exception soulevée lorsque le programme tente de diviser un nombre par zéro.
+
+Forme générale de gestion d’exception
+DECLARE
+    déclaration et initialisation;  
+BEGIN 
+    Instruction(s); 
+EXCEPTION
+	WHEN exception_name_1 THEN
+        	Instruction ;
+	WHEN exception_name_1 THEN
+        	Instruction ;
+END;
+
+Exemple
+set serveroutput on
+declare
+temp ARTICLE%rowtype;
+begin
+select * into temp from ARTICLE where IDART=1;
+EXCEPTION
+    WHEN no_data_found THEN
+        dbms_output.put_line('No data');
+end;
+/
+
+En plus des erreurs Oracle, vous pouvez intercepter vos propres erreurs en déclarant des variables dont le type est exception et en provoquant vous-même le saut dans la section de gestion des erreurs à l'aide de l'instruction RAISE
+Forme générale 
+DECLARE
+    exception_name EXCEPTION;
+BEGIN
+    instruction(s);
+    IF condition THEN
+        RAISE exception_name;
+    END IF;
+EXCEPTION
+    WHEN exception_name THEN
+        Instruction; 
+END;
+
+Exemple :
+set serveroutput on
+declare
+  messa exception;
+  i client%rowtype;
+begin
+  for i in (select * from client)loop
+    if i.numclient=2 then
+      raise messa;
+    end if;
+  end loop;
+EXCEPTION
+    WHEN messa THEN
+        dbms_output.put_line('Num exist');
+end;
+/
+Il n'est pas possible de déclarer la même exception deux fois dans le même bloc. Toutefois, dans le cas de blocs imbriqués, vous pouvez déclarer la même exception dans la section EXCEPTION de chaque bloc.
+Le peu d'exceptions prédéfinies vous oblige à traiter tous les autres cas dans la clause WHEN OTHERS en testant le code erreur SQL
+Vous pouvez définir votre propre message d'erreur et le numéro d'erreur Oracle à vos propres variables exception à l'aide du mot clé PRAGMA EXCEPTION_INIT. Exception_name est une chaîne de caractères jusqu'à 2048 octets et numéro_erreur est un nombre entier négatif compris entre -20000 et -20999.
+Forme générale
+DECLARE
+    exception_name EXCEPTION;
+    PRAGMA EXCEPTION_INIT(exception_name,-error_number);
+BEGIN
+    instruction;
+    IF condition THEN
+        RAISE exception_name;
+    END IF;
+EXCEPTION
+    WHEN exception_name THEN
+        instruction;
+END;
+
+Exemple :
+set serveroutput on
+DECLARE
+    msg EXCEPTION;
+    PRAGMA EXCEPTION_INIT(msg,-20015); 
+    n NUMBER := &n;
+BEGIN
+    FOR i IN 1..n LOOP
+        DBMS_OUTPUT.PUT_LINE(i);
+        IF i=n THEN
+            RAISE msg;
+        END IF;
+    END LOOP;
+EXCEPTION
+    WHEN msg THEN
+        DBMS_OUTPUT.PUT_LINE('loop finish');
+END;
+/
+Dans PL/SQL, la fonction RAISE_APPLICATION_ERROR permet d'attribuer un nom d'exception et un code d'erreur.
+set serveroutput on
+DECLARE
+    msg EXCEPTION;
+    n NUMBER := &n;
+BEGIN
+    FOR i IN 1..n LOOP
+        DBMS_OUTPUT.PUT_LINE(i);
+        IF i=n THEN
+            RAISE msg;
+        END IF;
+    END LOOP;
+EXCEPTION
+    WHEN msg THEN
+        RAISE_APPLICATION_ERROR(-20015,'loop finish');
+END;
+/
+VIII. Sous programmes
+VIII.1. Procédures
+Une procédure est un ensemble de code PL/SQL nommé, défini par l'utilisateur et généralement stocké dans la BD au niveau du serveur Oracle. Une procédure est paramétrable afin d'en faciliter la réutilisation.
+Forme generale
+CREATE [OR REPLACE] PROCEDURE nom_procedure(declaration de paramètres) 
+    IS
+        [section_declaration
+            Déclaration de variables;
+            Déclaration de constantes;
+        ]
+    BEGIN
+        [section_executable
+            Instructions;
+        ]
+    [EXCEPTION]
+            [section_exception
+            Instructions;
+            ]
+    END [nom_procedure];       
+    /
+
+CREATE indique que l'on veut créer une procédure stockée dans la base La clause facultative 
+OR REPLACE permet d'écraser une procédure existante portant le même nom 
+nom_procédure est le nom donné par l'utilisateur à la procédure
+paramètre est le nom donné par l'utilisateur au paramètre transmis
+IN(valeur par défaut) indique que le paramètre transmis par le programme appelant n'est pas modifiable par la procédure
+OUT indique que le paramètre est modifiable par la procédure 
+IN OUT indique que le paramètre est transmis par le programme appelant et renseigné par la procédure
+Commande pour supprimer la procédure : 
+drop procedure nom_procedure ;
+CREATE OR REPLACE PROCEDURE AugmentationPrix 
+ ( 
+ ArtID IN ARTICLE.IDART%Type /*numero Article*/ 
+ ,PourcAug IN NUMBER /*pourcentage d'augmentation*/ 
+ ) IS 
+ BEGIN 
+ -- augmentation du prix 
+ Update ARTICLE Set PRIXUNTART = PRIXUNTART * PourcAug Where IDART = ArtID; 
+ END; 
+ / 
+ Appel pour exécution de la procedure
+ set serveroutput on
+ execute AugmentationPrix(1,2);
+
+La procédure AugmentationPrix reçoit deux paramètres ArtID en entrée (IN) de même type que la colonne IDART de la table ARTICLE qui reçoit le numéro de l’article et PourcAug en entrée (IN) de type NUMBER qui reçoit le pourcentage d'augmentation
+Faisons maintenant appel à cette procédure dans un bloc PL/SQL anonyme et afficher idart, le nom de l’article et le prix de l’article avant et après augmentation.
+set SERVEROUTPUT ON
+Declare 
+ ArtT article%Rowtype ; 
+ Begin 
+ Select * Into ArtT From article Where idart = 1 ; /* lecture ligne avant mise a jour */ 
+ dbms_output.put_line( 'Avant augmentation ' || ArtT.idart|| ' ' || ArtT.nomart || ' --> ' || ArtT.PRIXUNTART) ; 
+ Augmentationprix( 1, 1.1 ) ; /*appel de la procedure*/ 
+ Select * Into ArtT From article Where idart = 1 ; -- lecture ligne apresmise a jour
+ dbms_output.put_line( 'Apres augmentation ' ||ArtT.idart|| ' ' || ArtT.nomart || ' --> ' || ArtT.PRIXUNTART) ; 
+ End ; 
+ /
+Autre exemple
+La procédure suivante affiche le nom et le prenom ayant la valeur de la cle primaire et où le nom inclus la chaine caractere NT
+create or replace procedure selectInfo(Num_client in client.numclient%type,Nom_client in client.nomclient%type)is
+nom client.NomClient%type;
+pren CLIENT.PRENOMCLIENT%type;
+CURSOR c_client (Num_client in client.numclient%type,Nom_client in client.nomclient%type) is select nomclient,PRENOMCLIENT from client where numclient=num_client and NOMCLIENT like '%'||Nom_client||'%';
+mavar varchar2(20):='NT';
+BEGIN
+open c_client(2,mavar);
+fetch c_client into nom,pren;
+DBMS_OUTPUT.PUT_LINE(nom||' '||pren);
+close c_client;
+end;
+/
+Appel pour execution
+set serveroutput on
+execute SELECTINFO('1','mavar');
+
+VIII.2. Fonctions
+Une fonction est identique à une procédure à la différence qu'elle retourne obligatoirement une valeur d'où le mot clé obligatoire RETURN.
+Forme générale 
+CREATE [OR REPLACE] FUNCTION nom_fonction(paramètres)
+        RETURN type_données_retour
+    IS | AS
+        [section_declaration
+            déclarations des variables ;
+            déclarations des constantes ;
+        ]
+    BEGIN
+        [section_executable
+            Instruction ;
+        ]
+    [EXCEPTION]
+            [section_exception
+            Instruction ;
+            ]
+    END [nom_fonction];
+    /
+
+CREATE indique que l'on veut créer une fonction stockée dans la base La clause facultative 
+OR REPLACE permet d'écraser une fonction existante portant le même nom_fonction est le nom donné par l'utilisateur à la fonction
+paramètres est le nom donné par l'utilisateur au paramètre transmis
+IN(valeur par défaut) indique que le paramètre transmis par le programme appelant n'est pas modifiable par la fonction 
+OUT indique que le paramètre est modifiable par la procédure 
+IN OUT indique que le paramètre est transmis par le programme appelant et renseigné par la fonction
+type_données_retour représente le type SQL ou PL/SQL du paramètre := représente le symbole d'assignation d'une valeur par défaut.
+Pour suppriner une fonction on utilise l’instruction : drop function nom_fonction.
+Nous allons transformer en fonction la procédure permettant de simuler une augmentation du prix de l’article en retournant le nouveau prix.
+Exemple :
+CREATE or REPLACE FUNCTION F_art(nr in number) 
+RETURN varchar2
+IS
+    nom varchar2(20);
+BEGIN
+    select nomart into nom from article where idart = nr;
+    return nom;
+END;
+/
+Appel de la function pour execution dans un bloc PL/SQL anonyme
+set serveroutput on
+DECLARE
+    nr number :=&nr;
+    nom varchar2(20);
+BEGIN
+    nom := F_art(nr);
+    dbms_output.put_line('Nom:'||'   '||nom);
+    end;
+/
+
+
+CREATE OR REPLACE FUNCTION FAugmentationPrix
+ ( 
+ ArtID IN ARTICLE.IDART%Type
+ ,PourcAug IN NUMBER
+ ) Return NUMBER 
+ IS 
+ prix ARTICLE.PRIXUNTART%Type; 
+ BEGIN 
+ Select PRIXUNTART Into prix From ARTICLE Where IDART = ArtID; 
+ /*augmentation du prix_article*/ 
+ prix := prix * PourcAug ; 
+ Return( prix ) ; -- retour de la valeur 
+ END; 
+ /
+Appel pour l’exécution de la fonction par un bloc PL/SQL anonyme
+set SERVEROUTPUT ON
+ Declare
+ prix article.PRIXUNTART%Type ; 
+ Begin 
+ Select PRIXUNTART Into prix From article Where IDART = 2 ; 
+ dbms_output.put_line( 'Le prix avant augmentation: ' || To_char( prix) ) ; 
+ dbms_output.put_line( 'Le apres apres augmentation: ' || To_char(FAugmentationPrix( 2, 1.5 ) ) ) ; 
+ End ; 
+ /
+
+VIII.3. Paquetages
+Un paquetage est un ensemble de procédures et fonctions regroupées dans un objet nommé. Un paquetage est organisé en deux parties distinctes dont les spécifications et le corps.
+Un paquetage est organisé en deux parties distinctes :
+Une partie spécification qui permet de spécifier à la fois les fonctions et procédures publiques ainsi que les déclarations des types, variables, constantes, exceptions et curseurs utilisés dans le paquetage et visibles par le programme appelant.
+Une partie corps qui contient les blocs et les spécifications de tous les objets publics listés dans la partie spécification. Cette partie peut inclure des objets qui ne sont pas listés dans la partie spécification, et sont donc privés. Cette partie peut également contenir du code qui sera exécuté à chaque invocation du paquetage par l'utilisateur.
+Forme générale de la partie spécification du paquetage
+CREATE [OR REPLACE] PACKAGE nom_package
+    IS | AS
+    [déclaration des variables ...]
+    [déclaration des constantes...]
+    [déclaration des exceptions ...] 
+    [spécification des curseurs ...]
+    [PROCEDURE nom_procedure(parametres)
+    ]
+    [FUNCTION nom_fonction (paramètres)
+        RETURN type_donnees_retour
+    ]
+END [nom_package];
+
+
+Forme générale de la partie corps du paquetage
+
+CREATE [OR REPLACE] PACKAGE BODY nom_package
+    IS | AS
+    [declaration des variable privées...]
+    [declaration des constantes privées ...]
+    BEGIN
+        [instruction d’initialisation]
+        [PROCEDURE nom_procedure (paramètres)
+            IS | AS
+                déclarations des variables;
+                déclarations des constantes;                  
+            BEGIN
+                instruction(s);
+            EXCEPTION
+                WHEN ...
+            END
+        ]
+        [FUNCTION  nom_function (paramètres)
+                RETURN type_données_retour
+            IS | AS
+                déclarations des variables;
+                déclarations des constantes;          
+            BEGIN
+                statement(s);
+            EXCEPTION
+                WHEN ...
+            END
+        ]
+    [EXCEPTION 
+        WHEN built-in_exception_name_1 THEN
+            instruction;
+    ]   
+END;
+/
+
+Exemple de paquetage
+create or replace package P_article
+is
+procedure add_article(id article.IDART%type, num_cli article.NUMCLIENT%type,
+id_four article.IDFOUR%type,id_vend article.IDVEND%type,nom_art article.NOMART%type,
+prix_unit article.PRIXUNTART%type);
+--surcharge deux procedure de meme nom mais de meme parametres et nombre differents 
+procedure add_article(id article.idart%type, num_cli article.NUMCLIENT%type,
+id_four article.IDFOUR%type,id_vend article.IDVEND%type,prix_unit article.PRIXUNTART%type);
+
+procedure info_article(id article.IDART%type);
+
+function affiche_prix(id article.IDART%type)return number;
+
+procedure supprimer_article(id article.IDART%type);
+
+procedure supprimer_article;--procedure sans parametres
+end P_article;
+/
+
+create or replace package body P_article
+is
+procedure add_article
+(id article.idart%type, num_cli article.NUMCLIENT%type,
+id_four article.IDFOUR%type,id_vend article.IDVEND%type,
+nom_art article.NOMART%type,prix_unit article.PRIXUNTART%type)
+is
+begin
+insert into article(IDART,NUMCLIENT,IDFOUR,IDVEND,NOMART,PRIXUNTART)
+values(id,num_cli,id_four,id_vend,nom_art,prix_unit);
+end;
+
+procedure add_article(id article.idart%type, num_cli article.NUMCLIENT%type,
+id_four article.IDFOUR%type,id_vend article.IDVEND%type,prix_unit article.PRIXUNTART%type)
+is
+begin
+insert into article(IDART,NUMCLIENT,IDFOUR,IDVEND,PRIXUNTART)
+values(id,num_cli,id_four,id_vend,prix_unit);
+end;
+
+procedure info_article(id article.IDART%type)
+is
+var_numCli article.NUMCLIENT%type;
+var_idFour article.IDFOUR%type;
+var_idvend article.IDVEND%type;
+var_nomart article.NOMART%type;
+var_prixUnit article.PRIXUNTART%type;
+begin
+select NUMCLIENT,IDFOUR,IDVEND,NOMART,PRIXUNTART into 
+var_numCli,var_idFour,var_idvend,var_nomart,var_prixUnit 
+from article where IDART=id; 
+DBMS_OUTPUT.PUT_LINE(var_numCli);
+DBMS_OUTPUT.PUT_LINE(var_idFour);
+DBMS_OUTPUT.PUT_LINE(var_idvend);
+DBMS_OUTPUT.PUT_LINE(var_nomart);
+DBMS_OUTPUT.PUT_LINE(var_prixUnit);
+end;
+
+function affiche_prix(id article.IDART%type)return number
+is
+var_prixUnit article.PRIXUNTART%type;
+begin
+select PRIXUNTART into var_prixUnit from article where IDART=id;
+return var_prixUnit;
+end;
+
+procedure supprimer_article(id article.IDART%type)
+is
+begin
+delete from article where IDART=id;
+commit;
+end;
+
+
+procedure supprimer_article
+is
+cursor c_art is select IDART from article;
+var_id article.IDART%type;
+begin
+open c_art;
+loop
+fetch c_art into var_id;
+exit when c_art%notfound;
+if affiche_prix(var_id)in (500,100,600)then
+delete from article where IDART=var_id;
+commit;
+end if;
+end loop;
+end;
+end P_article;
+/
+Appel pour execution
+
+--ferst procedure add_article
+execute P_article.add_article(4,2,1,1,'Aiguille',600);
+--second procedure add_article sans nomart
+execute P_article.add_article(7,2,1,2,2000);--champ n'acceptant pas null values
+execute P_article.info_article(1);
+select P_article.affiche_prix(1) from dual;
+execute P_article.supprimer_article(6);
+--supprimer les article ayant les prix entre 500,100,600
+execute P_article.supprimer_article;
+VIII.4. Les déclencheurs (Triggers)
+Un déclencheur est un bloc PL/SQL associé à une vue ou une table, qui s'exécutera lorsqu'une instruction du langage de manipulation de données (DML) (INSERT, UPDATE et DELETE) sera exécutée.
+L'avantage principal du déclencheur réside dans le fait que le code est centralisé dans la base de données, et se déclenchera quel que soit l'outil utilisé pour mettre à jour ces données, donnant ainsi l'assurance qu'une utilisation d'un ordre DML depuis Sql*Plus, Forms ou n'importe quelle application tierce procurera un résultat identique sur les données.
+L'inconvénient principal du déclencheur réside dans le fait que son exécution utilise des ressources qui peuvent augmenter sensiblement les temps de traitement, notamment lors de modifications massives apportées sur une table.
+Un déclencheur s'exécute dans le cadre d'une transaction. Il ne peut donc pas contenir d'instruction COMMIT ou ROLLBACK ou toute instruction générant une fin de transaction implicite (ordre DDL)
+Les ordres SQL (SELECT, INSERT, UPDATE, DELETE) contenus dans le bloc PL/SQL et qui se référent à la table sur laquelle s'exécute le déclencheur peuvent générer l'exception ORA-04091 TABLE IS MUTATING. 
+Le bloc PL/SQL qui constitue le trigger peut être exécuté avant ou après la vérification des contraintes d'intégrité Il peut être exécuté pour chaque ligne affectée par l'ordre DML ou bien une seule fois pour la commande 
+Seules les colonnes de la ligne en cours de modification sont accessibles par l'intermédiaire de 2 variables de type enregistrement 
+OLD et NEW OLD représente la valeur avant modification 
+OLD n'est renseignée que pour les ordres DELETE et UPDATE. Elle n'a aucune signification pour un ordre INSERT, puisqu'aucune ancienne valeur n'existe 
+NEW représente la nouvelle valeur.
+NEW n'est renseignée que pour les ordres INSERT et UPDATE. Elle n'a aucune signification pour un ordre DELETE, puisqu'aucune nouvelle valeur n'existe.
+Ces deux variables peuvent être utilisées dans la clause WHEN du déclencheur et dans la section exécutable 
+Dans cette section, elles doivent être préfixées comme des variables hôtes avec l'opérateur: 
+Les noms de ces deux variables sont fixés par défaut, mais il est possible de les modifier en précisant les nouveaux noms dans la clause REFERENCING 
+REFERENCING OLD AS nouveau_nom NEW AS nouveau_nom
+
+Forme générale
+CREATE [OR REPLACE] TRIGGER nom_trigger
+    BEFORE | AFTER
+    [INSERT, UPDATE, DELETE [COLUMN NAME..]
+    ON nom_table
+
+    Referencing [ OLD AS OLD | NEW AS NEW ]
+    FOR EACH ROW | FOR EACH STATEMENT [ WHEN Condition ]
+DECLARE
+    [section_declaration
+        déclarations des variable;
+        déclarations des constantes;]
+BEGIN
+    [section_executable
+        Instruction ;]
+EXCEPTION
+    [section_exception
+        Instruction(s) ;]
+END;
+
+VIII.4.1. Les déclencheurs sur TABLE
+Exemples
+Un déclencheur très basique qui ne fait qu'afficher le numéro et le nom d'un vendeur que l'on veut supprimer de la table client.
+CREATE OR REPLACE TRIGGER TRG_client 
+ BEFORE DELETE -- avant supression 
+ ON client -- sur la table client 
+ FOR EACH ROW -- pour chaque ligne 
+ Declare 
+ notifice VARCHAR2(100); 
+ Begin 
+ dbms_output.put_line( 'Suppression du client n° ' || To_char( 
+:OLD.numclient) 
+ || ' -> ' || :OLD.nomclient ) ; 
+ End ; 
+ /
+ 
+ Appel du declencheur pour execution
+ set serveroutput on
+delete from client where NUMCLIENT=1;
+Déclencheur permettant de traduire en majuscule le nom du client pour l’enregistrer dans la table.
+CREATE or REPLACE TRIGGER low_upper
+    BEFORE
+    INSERT ON client
+    FOR EACH ROW
+BEGIN
+    :new.NOMCLIENT := upper(:new.NOMCLIENT);
+END;
+/
+Déclencheur pour empêcher de supprimer la ligne où numclient=1
+CREATE or REPLACE TRIGGER stopDelRow
+    AFTER
+    DELETE ON client
+    FOR EACH ROW
+BEGIN
+    IF :old.numclient = 1 THEN
+        raise_application_error(-20015, 'You can''t delete this row');
+    END IF;
+END;
+/
+Declencheur pour auto-incrementation de la clé primaire de la table client
+create or replace trigger cleauto_client
+before insert on client
+for each row
+declare
+n integer;
+newkey integer;
+preums exception;
+begin
+--Recherche s'il existe des tuples dans la table
+select count(*) into n from client;
+if n=0 then
+raise preums;-- Premiere insertion
+end if;
+-- Recherche la valeur de la clé C la plus élevée
+-- et affecte C+1 à la nouvelle clé
+select max(numclient) into newkey from client;
+:new.numclient := newkey+1;
+exception
+-- Premier numero=1
+when preums then :new.numclient := 1;
+end;
+/
