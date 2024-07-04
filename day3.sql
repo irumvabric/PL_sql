@@ -72,3 +72,47 @@ BEGIN
 --    END;
 END;
 /
+
+
+--------------------------Triggers---------------------------------------
+
+CREATE or REPLACE TRIGGER low_upper
+    BEFORE
+    INSERT ON client
+    FOR EACH ROW
+BEGIN
+    :new.NOMCLIENT := upper(:new.NOMCLIENT);
+END;
+/
+
+
+
+----------------------AutoIncrement------------------------------------
+
+
+create or replace trigger cleauto_client
+before insert on client
+for each row
+declare
+n integer;
+newkey integer;
+preums exception;
+begin
+--Recherche s'il existe des tuples dans la table
+select count(*) into n from client;
+if n=0 then
+raise preums;-- Premiere insertion
+end if;
+-- Recherche la valeur de la clé C la plus élevée
+-- et affecte C+1 à la nouvelle clé
+select max(CLIENTID) into newkey from client;
+:new.CLIENTID := newkey+1;
+exception
+-- Premier numero=1
+when preums then :new.CLIENTID := 1;
+end;
+/
+
+
+
+
