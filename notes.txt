@@ -1,5 +1,7 @@
 I. Introduction au  bloc PL/SQL
 
+ok
+
 PL/SQL est un langage structuré en blocs, constitués d'un ensemble d'instructions. Un bloc PL/SQL peut être "externe", on dit alors qu'il est anonyme, ou alors stocké dans la base de données sous forme de procédure, fonction ou déclencheur. 
 
 Un bloc PL/SQL est intégralement envoyé au moteur PL/SQL, qui traite chaque instruction PL/SQL et sous-traite les instructions purement SQL au moteur SQL, afin de réduire le trafic réseau.
@@ -800,6 +802,9 @@ set SERVEROUTPUT ON
  dbms_output.put_line( 'Le apres apres augmentation: ' || To_char(FAugmentationPrix( 2, 1.5 ) ) ) ; 
  End ; 
  /
+
+
+ici
 
 VIII.3. Paquetages
 Un paquetage est un ensemble de procédures et fonctions regroupées dans un objet nommé. Un paquetage est organisé en deux parties distinctes dont les spécifications et le corps.
