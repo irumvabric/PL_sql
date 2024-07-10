@@ -126,7 +126,7 @@ DECLARE
     Cursor C Is SELECT FournisseurID, Nom_Fourn, Adresse_Fourn, Telephone_Fourn, Email_Fourn FROM FOURNISSEUR WHERE FOURNISSEURID= 1;
 
 BEGIN
-    SELECT FournisseurID, Nom_Fourn, Adresse_Fourn, Telephone_Fourn, Email_Fourn INTO id_Foruniseur,Nom_fourniseeur,adder_Foruniseur,tele_fourniseeur,email_Foruniseur FROM FOURNISSEUR WHERE FOURNISSEURID= 1;
+    -- SELECT FournisseurID, Nom_Fourn, Adresse_Fourn, Telephone_Fourn, Email_Fourn INTO id_Foruniseur,Nom_fourniseeur,adder_Foruniseur,tele_fourniseeur,email_Foruniseur FROM FOURNISSEUR WHERE FOURNISSEURID= 1;
     
     OPEN C;
         FETCH C INTO id_Foruniseur,Nom_fourniseeur,adder_Foruniseur,tele_fourniseeur,email_Foruniseur;

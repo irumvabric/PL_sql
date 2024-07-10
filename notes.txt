@@ -1,11 +1,16 @@
 I. Introduction au  bloc PL/SQL
+
 PL/SQL est un langage structuré en blocs, constitués d'un ensemble d'instructions. Un bloc PL/SQL peut être "externe", on dit alors qu'il est anonyme, ou alors stocké dans la base de données sous forme de procédure, fonction ou déclencheur. 
+
 Un bloc PL/SQL est intégralement envoyé au moteur PL/SQL, qui traite chaque instruction PL/SQL et sous-traite les instructions purement SQL au moteur SQL, afin de réduire le trafic réseau.
-Syntaxe d’un bloc PL/SQ L
+
+Syntaxe d’un bloc PL/SQ 
+
 Chaque bloc PL/SQL peut être constitué de 3 sections :
 Une section facultative de déclaration et initialisation de types, variables et constantes ;
 Une section obligatoire contenant les instructions d'exécution ;
 Une section facultative de gestion des erreurs ;
+
 [DECLARE 
 … déclaration et initialisation] 
 BEGIN 
@@ -16,8 +21,11 @@ Un bloc PL/SQL minimum peut être représenté de la façon suivante:
 BEGIN 
 Null ; 
 END;
+
 Le mot clé BEGIN détermine le début de la section des instructions exécutables. Le mot clé END; indique la fin de la section des instructions exécutables. Une seule instruction figure dans ce bloc : Null; qui ne génère aucune action. Ce bloc PL/SQL ne fait donc absolument rien.
+
 La section déclarative (facultative) d'un bloc débute par le mot clé DECLARE. Elle contient toutes les déclarations des variables qui seront utilisées localement par la section exécutable, ainsi que leur éventuelle initialisation.
+
 SET SERVEROUTPUT ON
 DECLARE
 nom VARCHAR2(20):='NZOYIHAYA Desire';
@@ -25,12 +33,19 @@ BEGIN
 SYS.DBMS_OUTPUT.PUT_LINE('Hello '|| nom);
 END;
 /
+
 Une variable nom est déclaré de type VARCHAR2(20) et initialisée avec la valeur 'NZOYIHAYA Desire'.
+
 Dans la section exécutable, cette variable est transmise à la fonction DBMS_OUTPUT() pour être affichée à l'écran.
+
 Cette section ne peut pas contenir d'instructions exécutables. Toutefois, il est possible de définir dans cette section des procédures ou des fonctions contenant une section exécutable. Toute variable doit avoir été déclarée avant de pouvoir être utilisée dans la section exécutable.
+
 Utiliser un slash (/) pour exécuter un boc PL/SQL anonyme dans PL/SQL.
+
 Placer un point-virgule (;) à la fin d’une instruction SQL ou SQL*PLUS.
+
 Les chaînes de caractères et les dates doivent être entourées de simples quottes ( ' ' ).
+
 Les commentaires peuvent être :
 sur plusieurs lignes avec : /* début et fin de commentaire*/
 sur une ligne précédée de : -- début et fin de commentaire
@@ -399,11 +414,18 @@ Un curseur est un pointeur qui correspond à une requête. Il existe deux types 
 V.1. Curseur implicite
 Les curseurs implicites sont créés par le système et ne sont pas manipulable par l’utilisateur. Le curseur implicite est créé à chaque fois qu’on exécute une requête de manipulation des données. 
 Sur Oracle, les données demandées par l’utilisateur sont stockées dans la mémoire PGA (Program Global Area) où il y a les curseurs qui sont des pointeurs qui pointent sur les données (première ligne, 2è ligne, …). Il y a une mémoire spéciale qui permet de stocker toutes les informations concernant cette requête à savoir les types de données, les noms des champs, …
+
 V.2. Curseur explicite  
+
 Déclaration du curseur
+
+
 La déclaration du curseur permet de stocker l'ordre Select dans le curseur. Le curseur se définit dans la partie Declare d'un bloc PL/Sql. 
+
 Forme générale de : Cursor nomcurseur IS Requete_SELECT ;
+
 Syntaxe : declare cursor <nom_curseur> IS SELECT col1, col2, col3, … from tab1, tab2, tab3, … where <condition>;
+
 Exemple: 
 Declare 
 cursor c_employe IS SELECT nom_emp, prenom_emp, salaire FROM employe WHERE salaire BETWEEN 100000 AND 250000;
@@ -412,15 +434,22 @@ Il y a les traitement complexe qu’on ne peut pas faire en utilisant les requê
 L’ouverture ;
 Exploitation ;
 Fermeture.
+
 Cursor nom_curseur : declaration du curseur
+
 Open nom_curseur : Ouverture d'un curseur SQL
+
 Fetch nom_curseur into nom_variable: le curseur est lu par l’instruction fetch. mettre chaque ligne de mon curseur dans nom_variable
+
 Close nom_curseur : fermeture du curseur
+
 Les attributs du curseur
+
 %ISOPEN : Cet attribut prend la valeur TRUE lorsque le curseur indiqué est ouvert, sinon il prend la valeur FALSE
 %FOUND : Cet attribut prend la valeur TRUE lorsque une ligne est ramenée, sinon il prend la valeur FALSE
 %NOTFOUND : Cet attribut prend la valeur FALSE lorsque une ligne est ramenée, sinon il prend la valeur TRUE
 %ROWCOUNT : Cet attribut retourne le nombre de lignes impactées par la dernière instruction SQL
+
 Ces attributs sont type booléen sauf %ROWCOUNT de type numérique
 
 
@@ -430,18 +459,22 @@ Declare
 Nom_client CLIENT.NOMCLIENT%Type ;
  Cursor C Is Select NOMCLIENT From client Where NUMCLIENT=1; 
 Begin 
- Select NOMCLIENT Into Nom_client From client Where NUMCLIENT= 1; 
  Open C ;
+
  Fetch C Into Nom_client;
- DBMS_OUTPUT.PUT_LINE(Nom_client);
+    DBMS_OUTPUT.PUT_LINE(Nom_client);
+
  Close C ;
 End ; 
 /
+
 V.3 Curseur paramétré
+
 Le curseur paramétré PL/SQL permet de passer les paramètres dans un curseur et de les utiliser dans une requête.
 Le curseur paramétré PL/SQL définit uniquement le type de données du paramètre et n'a pas besoin de définir sa longueur.
 Les valeurs par défaut sont assignées aux paramètres du curseur. La portée des paramètres est locale.
 Les curseurs paramétrés sont également des curseurs statiques qui peuvent transmettre la valeur du paramètre lorsque le curseur est ouvert.
+
 Exemple :
 set SERVEROUTPUT ON
 DECLARE
@@ -454,6 +487,8 @@ DBMS_OUTPUT.PUT_LINE(nom);
 close c_client;
 end;
 /
+
+
 VI. Portée des variables
 La portée ou visibilité d'une variable est limitée au bloc PL/SQL dans lequel elle est déclarée. Elle est donc locale au bloc PL/SQL. la visibilité d'une variable se rapporte toujours à la plus proche déclaration
 set serveroutput on
@@ -532,6 +567,7 @@ EXCEPTION
 END;
 
 Exemple :
+
 set serveroutput on
 declare
   messa exception;
@@ -658,6 +694,7 @@ Declare
  /
 Autre exemple
 La procédure suivante affiche le nom et le prenom ayant la valeur de la cle primaire et où le nom inclus la chaine caractere NT
+
 create or replace procedure selectInfo(Num_client in client.numclient%type,Nom_client in client.nomclient%type)is
 nom client.NomClient%type;
 pren CLIENT.PRENOMCLIENT%type;
@@ -705,6 +742,7 @@ type_données_retour représente le type SQL ou PL/SQL du paramètre := représe
 Pour suppriner une fonction on utilise l’instruction : drop function nom_fonction.
 Nous allons transformer en fonction la procédure permettant de simuler une augmentation du prix de l’article en retournant le nouveau prix.
 Exemple :
+
 CREATE or REPLACE FUNCTION F_art(nr in number) 
 RETURN varchar2
 IS
@@ -714,7 +752,10 @@ BEGIN
     return nom;
 END;
 /
+
 Appel de la function pour execution dans un bloc PL/SQL anonyme
+
+
 set serveroutput on
 DECLARE
     nr number :=&nr;
@@ -731,22 +772,31 @@ CREATE OR REPLACE FUNCTION FAugmentationPrix
  ArtID IN ARTICLE.IDART%Type
  ,PourcAug IN NUMBER
  ) Return NUMBER 
+
  IS 
+
  prix ARTICLE.PRIXUNTART%Type; 
+
  BEGIN 
+
  Select PRIXUNTART Into prix From ARTICLE Where IDART = ArtID; 
+
  /*augmentation du prix_article*/ 
  prix := prix * PourcAug ; 
- Return( prix ) ; -- retour de la valeur 
+
+ Return prix  ; -- retour de la valeur 
+
  END; 
  /
+
 Appel pour l’exécution de la fonction par un bloc PL/SQL anonyme
+
 set SERVEROUTPUT ON
  Declare
  prix article.PRIXUNTART%Type ; 
  Begin 
  Select PRIXUNTART Into prix From article Where IDART = 2 ; 
- dbms_output.put_line( 'Le prix avant augmentation: ' || To_char( prix) ) ; 
+ dbms_output.put_line( 'Le prix avant augmentation: ' || To_char(prix) ) ; 
  dbms_output.put_line( 'Le apres apres augmentation: ' || To_char(FAugmentationPrix( 2, 1.5 ) ) ) ; 
  End ; 
  /
