@@ -252,3 +252,29 @@ DBMS_OUTPUT.PUT_LINE('Note: '||note);
 
 END;
 /
+
+
+
+create or replace trigger cleauto_etudiant
+before insert on Etudiant
+for each row
+declare
+nombre integer;
+nouveaucle integer;
+premierCle exception;
+begin
+select count(*) into nombre from Etudiant;
+if nombre=0 then
+raise premierCle;-- Premiere insertion
+end if;
+select max(ID_Etudiant) into nouveaucle from Etudiant;
+:new.ID_Etudiant := nouveaucle+1;
+exception
+when premierCle then :new.ID_Etudiant := 1;
+end;
+/
+
+
+INSERT INTO ETUDIANT ( NOM, PRENOM, DATE_NAISSANCE, EMAIL, TELEPHONE, SEXE, ADRESSE, VILLE, CODE_POSTAL, PAYS, DEPARTEMENT, NIVEAU_ETUDE, DATE_INSCRIPTION, NOTE_MOYENNE, ACTIVITE_EXTRA, BOURSIER, COMMENTAIRES) 
+VALUES ('Dupont', 'Jean', TO_DATE('1995-06-15', 'YYYY-MM-DD'), 'jean.dupont@example.com', '0123456789', 'M', '10 Rue de Paris', 'Paris', '75001', 'France', 'Informatique', 'Licence', TO_DATE('2020-09-01', 'YYYY-MM-DD'), 15.75, 'Football', 'O', 'Étudiant sérieux');
+
