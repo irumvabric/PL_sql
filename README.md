@@ -8,7 +8,7 @@ Execute as a single statement.
 Mainly used to manipulate data.
 Cannot contain PL/SQL code in it.
 
-
+zkkskss
 
 
 PL/SQL
